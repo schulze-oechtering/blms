@@ -370,7 +370,7 @@ ql_a_2it_probs_func <-
       Qs[ci] += alpha[n] * PE;
 
       // save for next trial
-      prev_reward = reward[n]
+      prev_reward = reward[n];
 
     } // trial loop
 
@@ -548,8 +548,8 @@ ql_a_2xi_probs_func <-
 
     vector[2] Qs;       // expectation value
     vector[2] Qs_init;  // initial expectation values
-    real prev_reward    // reward in previous trial
-    real xi             // effective xi based on reward in previous trial
+    real prev_reward;   // reward in previous trial
+    real xi;            // effective xi based on reward in previous trial
     real PE;            // prediction error
     vector[2] Ps;       // probabilities based on the softmax of the Q values
     int ci;             // index of the choice for which the ev needs to be updated
@@ -994,7 +994,7 @@ ql_a_2it_fu_probs_func <-
       Qs[3-ci] += alpha[n] * PE_uc;
 
       // save for next trial
-      prev_reward = reward[n]
+      prev_reward = reward[n];
 
     } // trial loop
 
@@ -2157,7 +2157,7 @@ ql_2a_rho_kfu_probs_func <-
 ql_2a_2rho_kfu_probs_func <-
   brms::stanvar(
     scode = '
-  vector ql_a_rho_kfu_probs(vector block_grp, vector choice, vector reward, vector alphapos, vector alphaneg, vector rhopoe, vector rhoneg) {
+  vector ql_a_rho_kfu_probs(vector block_grp, vector choice, vector reward, vector alphapos, vector alphaneg, vector rhopos, vector rhoneg) {
     int nT = size(choice);
     vector[nT] Ps_out;
 
@@ -2205,60 +2205,6 @@ ql_2a_2rho_kfu_probs_func <-
     ',
     block = 'functions'
   )
-### ql_2a_2rho_fu_probs_func -----------------------------------------------------
-
-ql_2a_2rho_fu_probs_func <-
-  brms::stanvar(
-    scode = '
-  vector ql_2a_2rho_fu_probs(vector block_grp, vector choice, vector reward, vector alphapos, vector alphaneg, vector rhopos, vector rhoneg, vector kappa) {
-    int nT = size(choice);
-    vector[nT] Ps_out;
-
-    vector[2] Qs;       // expectation value
-    vector[2] Qs_init;  // initial expectation values
-    real PE;            // prediction error
-    real PE_uc;         // prediction error for unchosen option
-    real alpha;         // effective learning rate (alphapos or alphaneg, respectively)
-    real rho;           // effective reward sensitivity (rhopos or rhoneg, respectively)
-    vector[2] Ps;       // probabilities based on the softmax of the Q values
-    int ci;             // index of the choice for which the ev needs to be updated
-                        // 1 corresponds to the "lower bound" (coded as 0)
-                        // 2 corresponds to the "upper bound" (coded as 1)
-
-    Qs_init = rep_vector(0.0, 2);
-    Qs = Qs_init;
-
-    for (n in 1:nT) {
-
-      if (n == 1 || block_grp[n]!=block_grp[n-1]) {
-        Qs = Qs_init;
-      }
-
-      // get choice of current trial (either 1 or 2)
-      ci = (choice[n]==1 ? 2 : 1);
-
-      // compute action probabilities
-      Ps = softmax(Qs);
-      Ps_out[n] = Ps[2]; // predicting upper bound
-
-      // prediction error
-      rho = (reward[n] > 0 ? rhopos[n] : rhoneg[n]);
-      PE = (rho*reward[n]) - Qs[ci];
-      PE_uc = (rho*(reward[n]*-1)) - Qs[3-ci];
-
-      // value updating (learning)
-      alpha = (PE >= 0) ? alphapos[n] : alphaneg[n];
-      Qs[ci] += alpha * PE;
-      Qs[3-ci] += kappa[n] * alpha * PE_uc;
-
-    } // trial loop
-
-    return Ps_out;
-  }
-    ',
-    block = 'functions'
-  )
-
 ### qlddm_2a_qdiff_func ---------------------------------------------
 
 
