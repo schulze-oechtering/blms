@@ -3185,6 +3185,8 @@ all_stanvars <-
     ql_2a_2xi_fu_probs_func = ql_2a_2xi_fu_probs_func,
     ql_a_rho_fu_probs_func = ql_a_rho_fu_probs_func,
     ql_a_2rho_fu_probs_func = ql_a_2rho_fu_probs_func,
+    ql_2a_rho_fu_probs_func = ql_2a_rho_fu_probs_func,
+    ql_2a_2rho_fu_probs_func = ql_2a_2rho_fu_probs_func,
     ql_a_it_kfu_probs_func = ql_a_it_kfu_probs_func,
     ql_a_2it_kfu_probs_func = ql_a_2it_kfu_probs_func,
     ql_2a_it_kfu_probs_func = ql_2a_it_kfu_probs_func,
@@ -3195,7 +3197,8 @@ all_stanvars <-
     ql_2a_2xi_kfu_probs_func = ql_2a_2xi_kfu_probs_func,
     ql_a_rho_kfu_probs_func = ql_a_rho_kfu_probs_func,
     ql_a_2rho_kfu_probs_func = ql_a_2rho_kfu_probs_func,
-    ql_2a_2rho_fu_probs_func = ql_2a_2rho_fu_probs_func,
+    ql_2a_rho_kfu_probs_func = ql_2a_rho_kfu_probs_func,
+    ql_2a_2rho_kfu_probs_func = ql_2a_2rho_kfu_probs_func,
     qlddm_2a_qdiff_func = qlddm_2a_qdiff_func,
     qlddm_2a_qdiff_nu_func = qlddm_2a_qdiff_nu_func,
     qlddm_a_qdiff_nu_func = qlddm_a_qdiff_nu_func
